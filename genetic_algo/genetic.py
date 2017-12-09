@@ -1,4 +1,4 @@
-import random
+import
 
 def _generate_parent(length, geneSet):
     genes = []

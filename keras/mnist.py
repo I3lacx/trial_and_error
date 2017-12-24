@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 import keras.utils
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
@@ -22,7 +21,7 @@ normaly it would expect tensorflow ordering
 np.random.seed(42)
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
-print(X_train.shape)
+print("X_train: shape", X_train.shape)
 
 plt.imshow(X_train[0])
 

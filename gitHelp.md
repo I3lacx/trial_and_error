@@ -24,4 +24,15 @@ Modify your last commit message
 `git reset HEAD~<number>`  
 This will uncommit your old changes from the last <number> commits
 
-
+## Squashing 
+   > `git log`  
+   > _STRG + EINFG um die nummer vom commit zu kopieren bis zu dem gestashed werden soll (nicht inkl.)_  
+   > `git rebase -i <PRESS EINFG>`  
+   > _Angezeigt werden die einzelnen commits mit mesagges_  
+   > _ i drücken für insert _  
+   > _alle bis auf den ersten `pick` mit `squash` ersetzen -> Squashed alle auf den ersten_  
+   > _ESC : wq_  
+   > _Neues Fenster ganz oben Gesamte commit message hinzufügen_  
+   > `git log` 
+   > _überprüfen ob alles geklappt hat_
+   

@@ -25,7 +25,7 @@ Modify your last commit message
 This will uncommit your old changes from the last <number> commits
 
 ## Squashing 
-   _ACHTUNG VOR DEM SQUASHING DEN EDITOR UND ANDERE FILE SYSTEMS DIE DAZU GEHÖREN SCHLIEßEN!!!_
+   __ACHTUNG VOR DEM SQUASHING DEN EDITOR UND ANDERE FILE SYSTEMS DIE DAZU GEHÖREN SCHLIEßEN!!!__
    > `git log`  
    > _STRG + EINFG um die nummer vom commit zu kopieren bis zu dem gestashed werden soll (nicht inkl.)_  
    > `git rebase -i <PRESS EINFG>`  

@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import pygame
 from pygame.locals import *
+import neural_network
 
 '''
 CONSTANT VARIABLES
@@ -11,143 +12,178 @@ GAME_HEIGHT = 786
 WORLD_BORDER = 10
 
 class Pong(object):
-    '''
-    Frame is the final image which is shown where everything is drawn on
+	'''
+	Frame is the final image which is shown where everything is drawn on
 
-    Attributes:
-        width: width of the frame
-        height: height of the frame
-        ball: a ball object from the Ball class
-    '''
-    ball = None
-    player1 = None
-    player2 = None
-    windowName = 'Pong'
-    FRAMES = 60
-    exit = False
+	Attributes:
+	width: width of the frame
+	height: height of the frame
+	ball: a ball object from the Ball class
+	'''
+	ball = None
+	player1 = None
+	player2 = None
+	windowName = 'Pong'
+	FRAMES = 60
+	exit = False
+	count = 0
 
-    def __init__(self, width, height):
-        #initialize pygame
-        pygame.init()
+	computerAI = neural_network.Neural_network()
 
-        #set window size
-        self.gameDisplay = pygame.display.set_mode((width,height))
+	def __init__(self, width, height):
+		#initialize pygame
+		pygame.init()
 
-        #set field to black backround
-        self.background_color = (0,0,0)
+		#set window size
+		self.gameDisplay = pygame.display.set_mode((width,height))
 
-        #set the clock
-        self.clock = pygame.time.Clock()
+		#set field to black backround
+		self.background_color = (0,0,0)
 
-    def update(self, keyInputs):
+		#set the clock
+		self.clock = pygame.time.Clock()
 
-        #check for EXIT
-        if keyInputs[K_ESCAPE]:
-            self.exitGame()
+	def update(self, keyInputs):
 
-        #check for Restart
-        if keyInputs[K_r]:
-            self.newRound(1)
+		#check for EXIT
+		if keyInputs[K_ESCAPE]:
+			self.exitGame()
 
-        #update Ball
-        self.ball.update(self.player1, self.player2)
+		#check for Restart
+		if keyInputs[K_r]:
+			self.newRound(1)
 
-        #update players
-        self.player1.update(keyInputs)
-        self.player2.update(keyInputs)
+		#update Ball
+		self.ball.update(self.player1, self.player2)
 
-        #update score
-        self.checkForPoint()
+		#update players
+		self.player1.update(keyInputs)
 
-        #update frame
-        self.draw()
+		self.count += 1
+		if(self.count > 30):
+			self.computerThink()
+			self.count = 0
+		self.player2.update([])
+		#computer think delay:
 
-    def exitGame(self):
-        self.exit = True
-        print("Exiting the game")
+		#update score
+		self.checkForPoint()
 
-    def draw(self):
-        #draw backgound
-        self.gameDisplay.fill(self.background_color)
+		#update frame
+		self.draw()
 
-        #draw Ball
-        self.drawBall()
+	def exitGame(self):
+		self.exit = True
+		print("Exiting the game")
 
-        #draw players
-        self.drawPlayer(self.player1)
-        self.drawPlayer(self.player2)
+	def draw(self):
+		#draw backgound
+		self.gameDisplay.fill(self.background_color)
 
-        #draw score
+		#draw Ball
+		self.drawBall()
 
-        #draw the rest
+		#draw players
+		self.drawPlayer(self.player1)
+		self.drawPlayer(self.player2)
 
-    def drawBall(self):
-        #to int for safety
-        x = int(self.ball.pos_x)
-        y = int(self.ball.pos_y)
-        r = int(self.ball.radius)
-        c = self.ball.color
+		#draw score
 
-        #draw ball on frame with above given measurments
-        pygame.draw.circle(self.gameDisplay, c, (x, y), r)
+		#draw the rest
 
-    def drawPlayer(self, player):
-        #to int for safety
-        x1 = int(player.pos_x)
-        y1 = int(player.pos_y)
-        x2 = int(player.width)
-        y2 = int(player.height)
+	def drawBall(self):
+		#to int for safety
+		x = int(self.ball.pos_x)
+		y = int(self.ball.pos_y)
+		r = int(self.ball.radius)
+		c = self.ball.color
 
-        #draw rect
-        pygame.draw.rect(self.gameDisplay, player.color, ((x1,y1),(x2,y2)))
+		#draw ball on frame with above given measurments
+		pygame.draw.circle(self.gameDisplay, c, (x, y), r)
 
-    def checkForPoint(self):
-        x_new, _ = self.ball.calcFuturePos()
-        #check for player 1
-        if(x_new < WORLD_BORDER):
-            self.addPoint(self.player1)
-            self.newRound(1)
+	def drawPlayer(self, player):
+		#to int for safety
+		x1 = int(player.pos_x)
+		y1 = int(player.pos_y)
+		x2 = int(player.width)
+		y2 = int(player.height)
 
-        if(x_new > GAME_WIDTH - WORLD_BORDER):
-            self.addPoint(self.player2)
-            self.newRound(2)
+		#draw rect
+		pygame.draw.rect(self.gameDisplay, player.color, ((x1,y1),(x2,y2)))
 
-    def newRound(self, winner):
-        #1 for player1 scored a point, 2 for player2 scored a point
-        if(winner == 1):
-            self.ball.speed = self.ball.init_speed
-        else:
-            self.ball.speed = self.ball.init_speed
-            self.ball.bounceX()
+	def checkForPoint(self):
+		x_new, _ = self.ball.calcFuturePos()
+		#check for player 1
+		if(x_new < WORLD_BORDER):
+			self.addPoint(self.player1)
+			self.newRound(1)
 
-        self.ball.set_init()
-        self.player1.set_init_cords()
-        self.player2.set_init_cords()
+		if(x_new > GAME_WIDTH - WORLD_BORDER):
+			self.addPoint(self.player2)
+			self.newRound(2)
 
-    def addPoint(self, player):
-        player.score += 1
+	#TODO: auslagern!
+	def computerThink(self):
+		data = self.normalizeCordinates()
+		data = data.reshape(1,6,1)
+		actions = self.computerAI.run(data)
+		if(actions[0][0] > actions[0][1]):
+			if(self.player2.speed > 0):
+				self.player2.speed = -self.player2.speed
+			print("MOVE UP")
+		else:
+			if(self.player2.speed < 0):
+				self.player2.speed = -self.player2.speed
+			print("MOVE DOWN")
 
-    #the everlasting loop while running the game
-    def run(self):
-        print("START RUN LOOP")
+	def newRound(self, winner):
+		#1 for player1 scored a point, 2 for player2 scored a point
+		if(winner == 1):
+			self.ball.speed = self.ball.init_speed
+		else:
+			self.ball.speed = self.ball.init_speed
+			self.ball.bounceX()
 
-        while not self.exit:
+			self.ball.set_init()
+			self.player1.set_init_cords()
+			self.player2.set_init_cords()
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.exitGame()
-                    break
+	def addPoint(self, player):
+		player.score += 1
 
-            #check keyboard input
-            pressedKeys = pygame.key.get_pressed()
+	#TODO: auslagern
+	def normalizeCordinates(self):
+		#normalized array consists of:
+		#ball_x cord, ball_y cord, ball_x speed, ball_y speed, player_x cord, player_y cord
+		#since there is no max ball speed it will just be divided by 10
+		# normalized from 0 to 1
+		normArr = np.zeros((1,6))
+		normArr[0][0] = self.ball.pos_x/GAME_WIDTH
+		normArr[0][1] = self.ball.pos_y/GAME_HEIGHT
+		normArr[0][2] = self.ball.speed[0]/10
+		normArr[0][3] = self.ball.speed[1]/10
+		normArr[0][4] = self.player2.pos_x/GAME_WIDTH
+		normArr[0][5] = self.player2.pos_y/GAME_HEIGHT
+		return normArr
 
-            self.update(pressedKeys)
+	#the everlasting loop while running the game
+	def run(self):
+		print("START RUN LOOP")
+		while not self.exit:
 
-            pygame.display.update()
-            self.clock.tick(self.FRAMES)
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					self.exitGame()
+					break
 
+			#check keyboard input
+			pressedKeys = pygame.key.get_pressed()
 
-        print("EXIT RUN LOOP")
+			self.update(pressedKeys)
+			pygame.display.update()
+			self.clock.tick(self.FRAMES)
+
+		print("EXIT RUN LOOP")
 
 class Ball(object):
     '''
@@ -246,93 +282,99 @@ class Ball(object):
         self.speed = self.init_speed[:]
 
 class Player(object):
-    '''
-    The class for a player Object
+	'''
+	The class for a player Object
 
-    Attributes:
-        pos_x: the x pos of the rect
-        pos_y: the y position of the rect
-        height: heihgt of the rect
-        width: the width of the rect
-        color: color in RGB
-        type: if its 1=player1 or 2=player2
+	Attributes:
+	pos_x: the x pos of the rect
+	pos_y: the y position of the rect
+	height: heihgt of the rect
+	width: the width of the rect
+	color: color in RGB
+	type: if its 1=player1 or 2=player2
 
-    '''
-    init_speed = 5
-    score = 0
+	'''
+	init_speed = 5
+	score = 0
 
-    def __init__(self, height, width, color, type_int):
-        self.height = height
-        self.width = width
-        self.color = color
-        self.type_int = type_int
-        self.speed = self.init_speed
+	def __init__(self, height, width, color, type_int):
+		self.height = height
+		self.width = width
+		self.color = color
+		self.type_int = type_int
+		self.speed = self.init_speed
 
-        self.set_init_cords()
+		self.set_init_cords()
 
-    def update(self, keyInputs):
-        #get curent y
-        y = self.pos_y
+	def update(self, keyInputs):
+		#get curent y
+		y = self.pos_y
 
-        #check movement
-        if keyInputs[K_UP] and self.speed > 0:
-            self.speed = -self.speed
+		if keyInputs:
+			#check movement TODO: auslagern! in eigene function
+			if keyInputs[K_UP] and self.speed > 0:
+				self.speed = -self.speed
 
-        if keyInputs[K_DOWN] and self.speed < 0:
-            self.speed = -self.speed
+			if keyInputs[K_DOWN] and self.speed < 0:
+				self.speed = -self.speed
 
-        #calc new pos
-        y_hat = y + self.speed
+		#calc new pos
+		y_hat = y + self.speed
 
-        #check boundaries HARD CODED GAME_HEIGHT, not so nice
-        if(y_hat > 0 and y_hat + self.height < GAME_HEIGHT):
-            #set new pos
-            self.pos_y = y_hat
-        # else:
-        #     print("Trying to move out of bounds, pos x:{} y:{}"\
-        #             .format(self.pos_x, self.pos_y))
-        return
+		#check boundaries HARD CODED GAME_HEIGHT, not so nice
+		if(y_hat > 0 and y_hat + self.height < GAME_HEIGHT):
+			#set new pos
+			self.pos_y = y_hat
+		# else:
+		#	 print("Trying to move out of bounds, pos x:{} y:{}"\
+		#              .format(self.pos_x, self.pos_y))
+		return
 
-    #TODO: CAREFUL WITH CALC BECAUSE IT SCALES ON MORE PIXELS
-    def calcMagnitude(self, y):
-        '''
-        calculates the magnitude for the position y given
-        the magnitude is a 2D array with [x,y] magnitude
-        '''
+	#TODO: CAREFUL WITH CALC BECAUSE IT SCALES ON MORE PIXELS
+	def calcMagnitude(self, y):
+		'''
+		calculates the magnitude for the position y given
+		the magnitude is a 2D array with [x,y] magnitude
+		'''
 
-        #diff to middle
-        magnitude = abs(self.pos_y - y) - self.height/2
-        #normalize = [-1,1]
-        magnitude = magnitude/(self.height/2)
-        #scale numbers are randomly picked can be changed for tweaking
-        #TODO: tweaking parameters
-        y_magnitude = magnitude**3 * 10
-        x_magnitude = abs(magnitude) + 0.8
-        print("magnitues: x=",x_magnitude,", y=",y_magnitude)
-        return [x_magnitude, y_magnitude]
+		#diff to middle
+		magnitude = abs(self.pos_y - y) - self.height/2
+		#normalize = [-1,1]
+		magnitude = magnitude/(self.height/2)
+		#scale numbers are randomly picked can be changed for tweaking
+		#TODO: tweaking parameters
+		y_magnitude = magnitude**3 * 10
+		x_magnitude = abs(magnitude) + 0.8
+		print("magnitues: x=",x_magnitude,", y=",y_magnitude)
+		return [x_magnitude, y_magnitude]
 
-    def set_init_cords(self):
-        #if player1
-        if(self.type_int == 1):
-            self.pos_x = WORLD_BORDER
-        else: #player2
-            self.pos_x = GAME_WIDTH - WORLD_BORDER - self.width
+	def set_init_cords(self):
+		#if player1
+		if(self.type_int == 1):
+			self.pos_x = WORLD_BORDER
+		else: #player2
+			self.pos_x = GAME_WIDTH - WORLD_BORDER - self.width
 
-        self.pos_y = int(GAME_HEIGHT/2 - self.height/2)
+		self.pos_y = int(GAME_HEIGHT/2 - self.height/2)
 
 def main():
-    #init
-    print("Initialize")
+	#init
+	print("Initialize")
+	my_NN = neural_network.Neural_network()
+	my_input = np.array([[[0.1,0.2,0.6,0.3,0.8,0.7]]])
+	my_input = my_input.reshape(1,6,1)
+	print(my_input)
+	print(my_NN.run(my_input))
 
-    game = Pong(GAME_WIDTH, GAME_HEIGHT)
-    #x,y,r,c
-    ball = Ball(5,(255,255,255))
-    player1 = Player(100,20,(255,255,255),1)
-    player2 = Player(100,20,(255,255,255),2)
-    game.player1 = player1
-    game.player2 = player2
-    game.ball = ball
-    game.run()
+	game = Pong(GAME_WIDTH, GAME_HEIGHT)
+	#x,y,r,c
+	ball = Ball(5,(255,255,255))
+	player1 = Player(100,20,(255,255,255),1)
+	player2 = Player(100,20,(255,255,255),2)
+	game.player1 = player1
+	game.player2 = player2
+	game.ball = ball
+	game.run()
 
 if __name__ == "__main__":
-    main()
+	main()

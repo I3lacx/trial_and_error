@@ -33,9 +33,3 @@ class Neural_network(object):
 
     def run(self, input):
         return self.model.predict(input, batch_size=1)
-
-my_NN = Neural_network()
-my_input = np.array([[[0.1,0.2,0.6,0.3,0.8,0.7]]])
-my_input = my_input.reshape(1,6,1)
-print(my_input)
-print(my_NN.run(my_input))

@@ -1,0 +1,20 @@
+Test Results:
+
+
+from k = 1 to 104
+
+MODE == 0
+FINAL STATS: equal distances: 1408, equal Votes: 743
+Total wrong guesses:  1248
+
+MODE == 1
+FINAL STATS: equal distances: 1408, equal Votes: 758
+Total wrong guesses:  1249
+
+MODE == 2
+FINAL STATS: equal distances: 1408, equal Votes: 743
+Total wrong guesses:  1421
+
+MODE == 3
+FINAL STATS: equal distances: 1408, equal VOtes = 758
+1433 total wrong

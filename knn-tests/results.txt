@@ -1,5 +1,6 @@
 Test Results:
 
+LOAD IRIS:
 
 from k = 1 to 104
 
@@ -18,3 +19,64 @@ Total wrong guesses:  1421
 MODE == 3
 FINAL STATS: equal distances: 1408, equal VOtes = 758
 1433 total wrong
+
+LOAD DIGITS
+
+k = 1
+
+MODE == 0
+FINAL STATS: equal distances: 26, equal Votes: 0
+Total wrong guesses:  9
+
+MODE == 3
+FINAL STATS: equal distances: 26, equal Votes: 0
+Total wrong guesses:  9
+
+k = 2, 3, 4
+FINAL STATS: equal distances: 194, equal Votes: 26
+
+MODE == 0
+Total wrong guesses:  34
+
+MODE == 1
+Total wrong guesses:  34
+
+MODE == 2
+Total wrong guesses:  40
+
+MODE == 3
+Total wrong guesses:  40
+
+k = 20, 21, 22
+FINAL STATS: equal distances: 771, equal Votes: 27
+
+!OKAY WTF
+MODE == 0
+Total wrong guesses:  68
+
+MODE == 1
+Total wrong guesses:  67
+
+MODE == 2
+Total wrong guesses:  70
+
+MODE == 3
+Total wrong guesses:  64
+
+
+increasing k....
+k= 50, 51, 52
+FINAL STATS: equal distances: 1467, equal Votes: 11 | 10
+obviously equal votes change based on the extra points you take in
+
+MODE == 0
+Total wrong guesses:  103
+
+MODE == 1
+Total wrong guesses:  100
+
+MODE == 2
+Total wrong guesses:  105
+
+MODE == 3
+Total wrong guesses:  103

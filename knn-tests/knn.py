@@ -2,8 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import collections
 from sklearn.datasets import load_iris
+from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 from sklearn.utils import check_random_state
+
 
 np.random.seed(42)
 
@@ -14,18 +16,26 @@ k =  5
 
 #0, 1, 2 or 3
 #0 none, 1 only k, 2 only vote, 3 both
-OPTIMIZED_MODE = 0
-
+OPTIMIZED_MODE = 3
 
 dataset = load_iris()
+#TODO: change number of classes just for fun
+dataset2 = load_digits()
 
 #information[i] to look at the i'ths data sample
 X = dataset.data
+X2 = dataset2.data
 #classes[i] to get the class of the i'ts component
 y = dataset.target
+y2 = dataset2.target
 
 #split set into train and seperate test set
 X_train, X_test, y_train, y_test = train_test_split(X, y ,train_size=0.7)
+X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2 ,train_size=0.7)
+
+
+print(X_train)
+print(y_train)
 
 def subList(posX,k):
     if(posX-k < 0):
@@ -87,10 +97,10 @@ def kNearestPoints(sortedDistances, k):
 #training Point is a array with index and distance
 def getClassForTrainingPoint(trainingPoint):
 	index = int(trainingPoint[1])
-	return y_train[index]
+	return y2_train[index]
 
 def vote(distanceArr):
-	distinctClasses = np.array(list(set(y_train)))
+	distinctClasses = np.array(list(set(y2_train)))
 	voteCount = np.zeros(len(distinctClasses))
 
 	for i in range(len(distanceArr)):
@@ -126,10 +136,10 @@ def predictAPoint(trainingData, point, k):
 	distances = kNearestPoints(distances, k)
 	return vote(distances)
 
-def main():
+def doSTUFF(X_test, X_train, y_test):
 	totalWrong = 0
-	for k in range(1,105):
-		#print("Iteration ", k)
+	for k in range(50,53):
+		print("k parameter: ", k)
 		correctGuessed = 0
 		wronglyGuessed = 0
 		for i in range(len(X_test)):
@@ -143,6 +153,9 @@ def main():
 	print("FINAL STATS: equal distances: {}, equal Votes: {}"\
 	      .format(equal_distance_counter, equal_vote_counter))
 	print("Total wrong guesses: ", totalWrong)
+
+def main():
+	doSTUFF(X2_test, X2_train, y2_test)
 
 if __name__ == "__main__":
 	main()

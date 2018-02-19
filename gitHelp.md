@@ -27,13 +27,13 @@ This will uncommit your old changes from the last <number> commits
 ## Squashing 
    __CLOSE EDITOR AND STOP THE SERVER!__
    > `git log`  
-   > _STRG + EINFG um die nummer vom commit zu kopieren bis zu dem gestashed werden soll (nicht inkl.)_  
+   > _ Press STRG + EINFG to copy the number of the commit you want to stash (not inclusive)_  
    > `git rebase -i <PRESS EINFG>`  
-   > _Angezeigt werden die einzelnen commits mit mesagges_  
-   > _ i drücken für insert _  
-   > _alle bis auf den ersten `pick` mit `squash` ersetzen -> Squashed alle auf den ersten_  
+   > _Now you can see the single commits with their messages_  
+   > _ press i for insert mode_  
+   > _replace `pick` with `squash` or `s` to squash every commit onto the first one_  
    > _ESC : wq_  
-   > _Neues Fenster ganz oben Gesamte commit message hinzufügen_  
+   > _Now you can enter a new commit message for the whole commit_  
    > `git log` 
-   > _überprüfen ob alles geklappt hat_
+   > _to check if everything worked as planned_
    

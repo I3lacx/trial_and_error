@@ -6,7 +6,8 @@ import pygsheets
 
 class Window(QtWidgets.QMainWindow):
 
-	items = ['Baendiger', 'White Pearl', 'Blut', 'Tears']
+	items = ['Baendiger', 'White Pearl', 'Blut', 'Tears', 'Fuehrungsregi', 'Dunkle Perlen',
+	'Silberner Drachenzahn', 'Goldener Drachenzahn', 'Wasserdrachentruhe','Gegenstand Segnen']
 	selectedItem = items[0]
 
 	def __init__(self):

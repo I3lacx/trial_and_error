@@ -1,0 +1,4 @@
+try():
+	difficult_function()
+expect CallError as exc:
+	raise DataCalculatingError(str(exc))

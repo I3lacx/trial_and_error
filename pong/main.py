@@ -7,8 +7,8 @@ import neural_network
 '''
 CONSTANT VARIABLES
 '''
-GAME_WIDTH = 1024
-GAME_HEIGHT = 786
+GAME_WIDTH = 700
+GAME_HEIGHT = 400
 WORLD_BORDER = 10
 
 class Pong(object):

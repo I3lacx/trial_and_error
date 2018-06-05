@@ -1,4 +1,4 @@
-# trial_and_error
+# Trial and error
 A reposetory with all kinds of projects using Python
 
 Interesting projects:

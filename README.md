@@ -1,5 +1,5 @@
 # Trial and error
-A reposetory with all kinds of projects using Python
+A repository with all kinds of projects using Python. Feel free to Create a Pull request :)
 
 Interesting projects:
 

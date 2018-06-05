@@ -7,5 +7,5 @@ To start the network use the variable_analyzer_nn.py file and call the main() fu
 
 To start Tensorboard type:
 
-`tensorbaord --log-dir="data/mnist/" `
+`tensorbaord --log-dir="tensorflow_logs/train_mnist/" `
 

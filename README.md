@@ -1,2 +1,11 @@
 # trial_and_error
-This is a reposetory where I try out different things and learn new stuff 
+A reposetory with all kinds of projects using Python
+
+Interesting Projects:
+
+- Projekt 1
+- Projekt 2
+- Projekt 3
+
+You can ignore the rest of the projects or check them out anyways.
+

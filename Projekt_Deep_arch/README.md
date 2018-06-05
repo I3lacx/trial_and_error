@@ -3,7 +3,8 @@
 A project where I build a Neural Network using tensorflow.
 This network is then analyzed using tensorboard.
 
-To start the network use the blabla.py file.
+To start the network use the variable_analyzer_nn.py file and call the main() function.
+
 To start Tensorboard type:
 
 `tensorbaord --log-dir="data/mnist/" `

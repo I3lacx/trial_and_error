@@ -29,3 +29,6 @@ To remove a directory, without the -r parameter to delte files
 
 `ls -a`
 View hidden files in a directory
+
+`chmod +x <filename>`
+To make a file executable, like an batch file (.sh) for example

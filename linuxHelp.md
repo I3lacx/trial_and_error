@@ -32,3 +32,9 @@ View hidden files in a directory
 
 `chmod +x <filename>`
 To make a file executable, like an batch file (.sh) for example
+
+`htop`
+To see currently running Processes and the cpu/gpu usage
+
+`sh <sh file>
+To execute a sh file

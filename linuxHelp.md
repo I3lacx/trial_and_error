@@ -36,5 +36,15 @@ To make a file executable, like an batch file (.sh) for example
 `htop`
 To see currently running Processes and the cpu/gpu usage
 
-`sh <sh file>
+`sh <sh file>`
 To execute a sh file
+
+
+###Conda
+`conda create -n <envName> pip python=3.6`
+Create conda environment with name
+
+`source activate <envName>`
+To switch into environment with name
+
+

@@ -36,6 +36,9 @@ To make a file executable, like an batch file (.sh) for example
 `htop`
 To see currently running Processes and the cpu/gpu usage
 
+`nvidia-smi`
+To get a nvidia overview of current gpu usage and which one is free
+
 `sh <sh file>`
 To execute a sh file
 

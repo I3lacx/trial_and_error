@@ -30,6 +30,9 @@ To remove a directory, without the -r parameter to delte files
 `ls -a`
 View hidden files in a directory
 
+`cp -r <path1> <path2>´
+Copy from path 1 to path 2
+
 `chmod +x <filename>`
 To make a file executable, like an batch file (.sh) for example
 

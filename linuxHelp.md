@@ -43,10 +43,13 @@ To see currently running Processes and the cpu/gpu usage
 To get a nvidia overview of current gpu usage and which one is free
 
 `sh <sh file>`
-To execute a sh file
+To execute a sh file with the shell
+
+`batch <file>`
+To exectue somehting with the standard batch console
 
 
-###Conda
+### Conda
 `conda create -n <envName> pip python=3.6`
 Create conda environment with name
 

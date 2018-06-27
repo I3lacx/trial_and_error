@@ -56,4 +56,10 @@ Create conda environment with name
 `source activate <envName>`
 To switch into environment with name
 
+### Byobu
 
+F2 -> new window
+F3 | Alt + Left -> move to left tab
+F4 | Alt + Right -> move to right tab
+Shift + F3/F4 | Shift + Left/Right -> Move to different split tab
+F6 -> exit and logout

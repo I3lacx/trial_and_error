@@ -1,17 +1,7 @@
-
-# coding: utf-8
-
-# In[1]:
-
-
 from observations import mnist
 import numpy as np
 import tensorflow as tf
 import os
-
-
-# In[7]:
-
 
 def load_mnist():
     """ loads data from mnist function and converts to numpy arrays"""
@@ -49,9 +39,6 @@ def get_logs_path(session):
         print("Saving log at: ", new_path)
         return new_path
     raise Exception("Path is already existing: ", new_path)
-
-
-# In[3]:
 
 def var_summaries(var):
     """Add summaries of var to tensorboard"""
@@ -151,9 +138,6 @@ def forward(input_samples, num_hidden=2, output_units=[20,10,10,10]):
     out_layer = dense_layer(layers["l"+str(num_hidden)], weight_pref, bias_pref, output_units[-1], name="Output_Layer")
     return out_layer
 
-# In[4]:
-
-
 def train(x_train, y_train, batch_size, input_size, num_epochs, writer):
     """ trains the network defined in forward """
     
@@ -170,20 +154,18 @@ def train(x_train, y_train, batch_size, input_size, num_epochs, writer):
     summ = tf.summary.merge_all()
     
     batches_per_epoch = x_train.shape[0] // batch_size
+    print("batches per epoch:", batches_per_epoch)
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         
         for epoch in range(num_epochs):
+            print("epoch:", epoch)
             for batch in range(batches_per_epoch):
                 x_batch = x_train[batch * batch_size : (batch+1) * batch_size]
                 y_batch = y_train[batch * batch_size : (batch+1) * batch_size]
                 
                 _, cur_loss, cur_summ = sess.run([train_op, loss, summ], feed_dict={x_ph: x_batch, y_ph: y_batch})
-                writer.add_summary(cur_summ, epoch*batches_per_epoch + batch)
-                #print(cur_loss)
-
-
-# In[5]:
+                #writer.add_summary(cur_summ, epoch*batches_per_epoch + batch)
 
 
 def run_model():
@@ -191,20 +173,20 @@ def run_model():
     logs_path = get_logs_path("Session_00")
     writer = tf.summary.FileWriter(logs_path, graph=tf.get_default_graph())
     train(x_train=mnist_data["x_train"], y_train=mnist_data["y_train"],
-     batch_size=100, input_size=784, num_epochs=5, writer=writer)
+     batch_size=300, input_size=784, num_epochs=5, writer=writer)
 
+def main():
+    run_model()
 
-# In[8]:
+    pref = {
+        "mode": "norm",
+        "mean": 0.2,
+        "stddev": 1
+    }
 
+    weights = create_weights(pref, 100, 784, 20)
 
-run_model()
+    print(weights)
 
-pref = {
-    "mode": "norm",
-    "mean": 0.2,
-    "stddev": 1
-}
-
-weights = create_weights(pref, 100, 784, 20)
-
-print(weights)
+if __name__ == "__main__":
+    main()

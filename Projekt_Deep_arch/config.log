@@ -1,0 +1,5 @@
+Bias preferences: 
+{'mode': 'norm', 'mean': 0.2, 'stddev': 1}
+
+Weight preferences: 
+{'mode': 'norm', 'mean': 0.2, 'stddev': 1}

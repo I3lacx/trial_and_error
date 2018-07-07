@@ -3,6 +3,37 @@ import numpy as np
 import tensorflow as tf
 import os
 
+
+""" Global Declaration of preferences
+omly used when random is deactivated"""
+weight_pref = {
+    "mode": "norm",
+    "mean": 0.2,
+    "stddev": 1
+}
+bias_pref = {
+    "mode": "norm",
+    "mean": 0.2,
+    "stddev": 1
+}
+
+
+def random_pref():
+    global weight_pref
+    global bias_pref
+    mean = np.round(np.random.random() * 2 -1, 2)
+    stddev = np.round(np.random.random() * 2, 2)
+    weight_pref = {
+        "mode": "norm",
+        "mean": mean,
+        "stddev": stddev
+    }
+    bias_pref = {
+        "mode": "norm",
+        "mean": mean,
+        "stddev": stddev
+    }
+
 def load_mnist():
     """ loads data from mnist function and converts to numpy arrays"""
 
@@ -23,6 +54,7 @@ def load_mnist():
 
     return data
 
+
 def get_logs_path(session):
     """ Returns path where log is going to be saved.
     @Input session is the parent folder for the runs
@@ -33,12 +65,22 @@ def get_logs_path(session):
     if not os.path.exists(logs_path):
         os.makedirs(logs_path)
     previous_runs = os.listdir(logs_path)
-    new_path = logs_path + "/run_{:02d}".format(len(previous_runs))
+    new_path = logs_path + "/run_{:02d}/".format(len(previous_runs))
     if not os.path.exists(new_path):
         os.makedirs(new_path)
         print("Saving log at: ", new_path)
         return new_path
     raise Exception("Path is already existing: ", new_path)
+
+
+def log_text(text, path):
+    """
+    Write text to path, in file config.log
+    """
+    file = open(path + "config" + ".log", "a")
+    file.write(text + "\n")
+    file.close()
+
 
 def var_summaries(var):
     """Add summaries of var to tensorboard"""
@@ -53,7 +95,7 @@ def var_summaries(var):
 
 
 def create_weights(pref, batch_size, in_size, out_size):
-#TODO: check if this works
+    #TODO: check if this works
     with tf.name_scope("weights"):
         weights = None
         if pref["mode"] == "norm":
@@ -61,7 +103,7 @@ def create_weights(pref, batch_size, in_size, out_size):
         elif pref["mode"] == "uniform":
             weights = tf.Variable(tf.random_uniform((batch_size, out_size, in_size), minval=pref["min"], maxval=["max"]))
         elif pref["mode"] == "const":
-            weights = tf.Variable(zeros((batch_size, out_size, in_size), dtype=tf.float32) + pref["value"])
+            weights = tf.Variable(tf.zeros((batch_size, out_size, in_size), dtype=tf.float32) + pref["value"])
         else:
             raise Exception("wrong parameter for mode: {}".format(pref["mode"]))
     return weights
@@ -76,7 +118,7 @@ def create_bias(pref, out_size):
         elif pref["mode"] == "uniform":
             bias = tf.Variable(tf.random_uniform((out_size,), minval=pref["min"], maxval=["max"]))
         elif pref["mode"] == "const":
-            bias = tf.Variable(zeros((out_size,), dtype=tf.float32) + pref["value"])
+            bias = tf.Variable(tf.zeros((out_size,), dtype=tf.float32) + pref["value"])
         else:
             raise Exception("wrong parameter for mode: {}".format(pref["mode"]))
 
@@ -105,88 +147,78 @@ def dense_layer(inputs, weight_pref, bias_pref, output_size, name):
 dabei sollte die depth variable sein, so wie wie viele hidden units ich habe
 wie die variablen aufgesetzt werden sollte auch per input regulierbar sein
 Maybe with dropout etc."""
-def forward(input_samples, num_hidden=2, output_units=[20,10,10,10]):
+
+
+def forward(input_samples, num_hidden=2, output_units=[265,128,64,10]):
     """ this is the whole network structure, returns the last layer after computing
     every other layer"""
-    
+
     #assert that inputs are vaguely corretct:
     assert len(output_units) == num_hidden + 2,    "output_units length: {}, while only {} num_hidden".format(len(output_units),  num_hidden)
-    
+
     #reshape input data
     input_layer = input_samples
-
-    pref = {
-        "mode": "norm",
-        "mean": 0.2,
-        "stddev": 1
-    }
-    weight_pref = pref
-    bias_pref = pref
 
     first_layer = dense_layer(input_layer, weight_pref, bias_pref, output_units[0], name="Input_layer")
 
     layers = {
-        "l0": first_layer 
+        "l0": first_layer
     }
-    
+
     # some deep layers num_hidden iterations, just shifted one forward
     for i in range(1,num_hidden+1):
         prev_layer = layers["l"+str(i-1)]
         layers["l"+str(i)] = dense_layer(prev_layer, weight_pref, bias_pref,
                                         output_units[i], name="Hidden_layer_"+str(i))
-    
+
     out_layer = dense_layer(layers["l"+str(num_hidden)], weight_pref, bias_pref, output_units[-1], name="Output_Layer")
     return out_layer
 
-def train(x_train, y_train, batch_size, input_size, num_epochs, writer):
+
+def train(x_train, y_train, writer, batch_size, num_epochs, input_size=784):
     """ trains the network defined in forward """
-    
+
     x_ph = tf.placeholder(tf.float32, [batch_size, input_size], name="x_ph")
     y_ph = tf.placeholder(tf.int32, [batch_size], name="y_ph")
 
     prediction = forward(x_ph)
-    
+
     loss = tf.losses.sparse_softmax_cross_entropy(labels=y_ph, logits=prediction)
     optimizer = tf.train.AdamOptimizer()
     train_op = optimizer.minimize(loss)
-    
+
     tf.summary.scalar("loss",loss)
     summ = tf.summary.merge_all()
-    
+
     batches_per_epoch = x_train.shape[0] // batch_size
     print("batches per epoch:", batches_per_epoch)
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        
+
         for epoch in range(num_epochs):
             print("epoch:", epoch)
             for batch in range(batches_per_epoch):
                 x_batch = x_train[batch * batch_size : (batch+1) * batch_size]
                 y_batch = y_train[batch * batch_size : (batch+1) * batch_size]
-                
+
                 _, cur_loss, cur_summ = sess.run([train_op, loss, summ], feed_dict={x_ph: x_batch, y_ph: y_batch})
-                #writer.add_summary(cur_summ, epoch*batches_per_epoch + batch)
+                writer.add_summary(cur_summ, epoch*batches_per_epoch + batch)
 
 
 def run_model():
     mnist_data = load_mnist()
     logs_path = get_logs_path("Session_00")
+    random_pref()
+    log_string = "Bias preferences: \n" + str(bias_pref) + "\n\nWeight preferences: \n" + str(weight_pref)
+    log_text(log_string, logs_path)
     writer = tf.summary.FileWriter(logs_path, graph=tf.get_default_graph())
     train(x_train=mnist_data["x_train"], y_train=mnist_data["y_train"],
-     batch_size=300, input_size=784, num_epochs=5, writer=writer)
+          writer=writer, batch_size=300, num_epochs=5)
+
 
 def main():
     run_model()
 
-    pref = {
-        "mode": "norm",
-        "mean": 0.2,
-        "stddev": 1
-    }
-
-    weights = create_weights(pref, 100, 784, 20)
-
-    print(weights)
 
 if __name__ == "__main__":
     main()

@@ -3,22 +3,22 @@ A repository with different kind of projects using Python.
 
 Interesting projects:
 
-- **SR-SPN**
+- [**SR-SPN**](SR-SPN/)
 
   _Code examples from my bachelorthesis_
   
 
-- **Projekt_Deep_arch**
+- [**Projekt_Deep_arch**](Projekt_Deep_arch/)
 
   _Analyzing the variable change in a Neural Network written in tensorflow using tensorboard_
   
   
-- **Q-Learning**
+- [**Q-Learning**](Q-Learning/)
 
   _Q-Learning Algorithm to play a self written pong game_
   
   
-- **metin2**
+- [**metin2**](metin2)
 
   _GUI Application with connection to google sheets api_
   

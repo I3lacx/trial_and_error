@@ -5,7 +5,7 @@ Interesting projects:
 
 - [**SR-SPN**](SR-SPN/)
 
-  _Code examples from my bachelorthesis_
+  _Most recent code examples from my bachelorthesis to provide a recent example on my coding style_
   
 
 - [**Projekt_Deep_arch**](Projekt_Deep_arch/)

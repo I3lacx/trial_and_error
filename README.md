@@ -1,7 +1,12 @@
 # Trial and error
-A repository with all kinds of projects using Python. Feel free to Create a Pull request :)
+A repository with different kind of projects using Python.
 
 Interesting projects:
+
+- **SR-SPN**
+
+  _Code examples from my bachelorthesis_
+  
 
 - **Projekt_Deep_arch**
 
@@ -18,5 +23,5 @@ Interesting projects:
   _GUI Application with connection to google sheets api_
   
 
-The rest of the projects are not very vell documented, but feel free to check them out anyway.
+The rest of the projects are not very vell documented and tend to be very old, but feel free to check them out.
 

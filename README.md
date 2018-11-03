@@ -5,12 +5,12 @@ Interesting projects:
 
 - [**SR-SPN**](SR-SPN/)
 
-  _Most recent code examples from my bachelorthesis to provide a recent example on my coding style_
+  _Most recent code examples from my bachelorthesis to provide an example of my tensorflow coding style_
   
 
 - [**Projekt_Deep_arch**](Projekt_Deep_arch/)
 
-  _Analyzing the variable change in a Neural Network written in tensorflow using tensorboard_
+  _Analyzing the variable change in a Neural Network written using tensorboard in tensorflow _
   
   
 - [**Q-Learning**](Q-Learning/)

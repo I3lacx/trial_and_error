@@ -10,7 +10,7 @@ Interesting projects:
 
 - [**Projekt_Deep_arch**](Projekt_Deep_arch/)
 
-  _Analyzing the variable change in a Neural Network written using tensorboard in tensorflow _
+  _Analyzing the variable change in a Neural Network. Written using tensorboard from tensorflow_
   
   
 - [**Q-Learning**](Q-Learning/)

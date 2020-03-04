@@ -1,15 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-class Bandit:
-    """ Single armed bandit to draw from normal, with mean and variance """
-    def __init__(self, mean, variance=1):
-        self.mean = mean
-        self.variance = variance
-
-    def draw(self):
-        sample = np.random.normal(self.mean, self.variance)
-        return sample
+from environments import create_environment
 
 
 class EpsilonGreedy:
@@ -39,20 +30,6 @@ class EpsilonGreedy:
         self.bandit_means[action] = (1-1/n) * old_mean + 1/n * sample
         self.total_reward += sample
         self.rewards.append(sample)
-
-
-def create_environment():
-    bandits = []
-    for _ in range(5):
-        bandits.append(Bandit(0))
-    for _ in range(2):
-        bandits.append(Bandit(1))
-    for _ in range(1):
-        bandits.append(Bandit(2))
-    for _ in range(1):
-        bandits.append(Bandit(3))
-
-    return bandits
 
 
 def create_agents(bandits):
@@ -90,6 +67,7 @@ def main():
     plt.legend()
     # plt.xscale('log')
     plt.show()
+
 
 if __name__ ==  "__main__":
     print("--------START---------")

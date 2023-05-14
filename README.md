@@ -1,5 +1,5 @@
 # Trial and error
-A repository with different kind of projects using Python.
+A repository with different projects using Python.
 
 Interesting projects:
 
